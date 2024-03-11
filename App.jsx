@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import WelcomeScreen from './src/screens/WelcomeScreen';
 import Main from './src/screens/Main';
+import RecipeDetailScreen from './src/screens/RecipeDetailScreen';
 
 const Stack = createNativeStackNavigator()
 
@@ -16,9 +17,8 @@ function App() {
     <NavigationContainer >
       <Stack.Navigator initialRouteName='welcome' screenOptions={{headerShown : false}}>
         <Stack.Screen name='main' component={Main} />
-        <Stack.Screen name='home' component={Home} />
-        <Stack.Screen name='homeOP' component={HomeOP} />
         <Stack.Screen name='welcome' component={WelcomeScreen} />
+        <Stack.Screen name='RecipeDetail' component={RecipeDetailScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

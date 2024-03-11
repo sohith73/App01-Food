@@ -17,7 +17,7 @@ export default function WelcomeScreen() {
           setTimeout(() => navigate.navigate('main'),1500)
      },[])
      return (
-          <View className='bg-amber-500 h-full flex-1 space-y-10 justify-center items-center'>
+          <View className='bg-[#f61313] h-full flex-1 space-y-10 justify-center items-center'>
                <StatusBar  barStyle={'dark-content'} />
                <Animated.View className='bg-white/20 rounded-full ' style={{padding : ring1}}>
                     <Animated.View className="bg-white/20 rounded-full "style={{padding : ring2}}>

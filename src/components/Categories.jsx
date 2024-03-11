@@ -4,7 +4,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Animated, { FadeInDown } from 'react-native-reanimated';
 import { Dummy } from '../constants/const';
 
-export default function Categories({ activeCategory, setActiveCategory }) {
+export default function Categories({ activeCategory, handelChangeCategory }) {
      useEffect(() => {
           // console.log(activeCategory)
           console.warn(activeCategory)
@@ -23,7 +23,7 @@ export default function Categories({ activeCategory, setActiveCategory }) {
                               return (
                                    <TouchableOpacity
                                         key={index}
-                                        onPress={() => setActiveCategory(cat.name)}
+                                        onPress={() => handelChangeCategory(cat.name)}
                                         className='flex items-center space-y-1'>
                                         <View className={"rounded-full p-[6px] m-5 " + activeClassButton}>
                                              <Image

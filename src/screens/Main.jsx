@@ -3,25 +3,28 @@ import React, { useEffect, useState } from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { BellIcon, MagnifyingGlassIcon } from 'react-native-heroicons/outline';
 import Categories from '../components/Categories';
+import Recipes from '../components/Recipes';
 import axios from 'axios';
-import { ColorSchemeStore } from 'nativewind/dist/style-sheet/color-scheme';
 
 export default function Main() {
-     const [activeCategory,setActiveCategory] = useState('harsh')
-     const [category,setCategory] = useState([])
+     const [activeCategory,setActiveCategory] = useState('Beef')
+     const [recipe ,setRecipe] = useState([])
      useEffect(() =>{
-          getCategory();
+          getRecipes()
      },[])
-
-     const getCategory = async ()=>{
+     const getRecipes = async(category = "Beef") =>{
           try {
-               const response  = await axios.get("https://www.themealdb.com/api/json/v1/1/categories.php")
-               if(response && response.data){
-                    setCategory(response.data.categories)
-               }
+               const response = await axios.get(`https://themealdb.com/api/json/v1/1/filter.php?c=${category}`)
+               // console.log(response.data)
+               setRecipe(response.data.meals)
           } catch (error) {
-               console.warn(error.message)
+               console.log(error.message)
           }
+     }
+     const handelChangeCategory = category =>{
+          getRecipes(category)
+          setActiveCategory(category)
+          setRecipe([])
      }
 
      return (
@@ -32,7 +35,7 @@ export default function Main() {
                     className="pt-8 space-y-6">
                     <View className="flex-row justify-between items-center mx-4 mb-2 ">
                          <Image className='rounded-full' source={require("../assets/avatar.png")} style={{ height: hp(6), width: hp(6.8) }} />
-                         <BellIcon color='gray' size={hp(5)} />
+                         <BellIcon color='gray' size={hp(5)}  />
                     </View>
                     <View className="mx-4 space-y-2 mb-2">
                          <Text className="text-neutral-600" style={{fontSize:hp(2.7)}}>Hello, <Text className="text-[#f61313]">BSC!</Text> </Text>
@@ -52,7 +55,10 @@ export default function Main() {
                          </View>
                     </View>
                     <View>
-                         <Categories categories={category} activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
+                         <Categories activeCategory={activeCategory} handelChangeCategory={handelChangeCategory} />
+                    </View>
+                    <View>
+                         <Recipes meals={recipe} />
                     </View>
                </ScrollView>
           </View>
