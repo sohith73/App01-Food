@@ -7,7 +7,7 @@ import { ChevronLeftIcon, ClockIcon, FireIcon, UsersIcon } from 'react-native-he
 import { HeartIcon } from 'react-native-heroicons/solid';
 import axios from 'axios';
 import Loading from '../components/Loading';
-
+import YoutubeIframe from 'react-native-youtube-iframe';
 
 export default function RecipeDetailScreen(props) {
      let item = props.route.params
@@ -27,6 +27,24 @@ export default function RecipeDetailScreen(props) {
           } catch (error) {
                console.log(error.message)
           }
+     }
+     const ingredientsIndex = (meal) => {
+          if (!meal) return []
+          let indexes = []
+          for (let i = 0; i < 20; i++) {
+               if (meal['strIngredient' + i]) {
+                    indexes.push(i);
+               }
+          }
+          return indexes
+     }
+     const getYoutubeVideoId = url =>{
+          const regex = /[?&]v=([^&]+)/;
+          const match = url.match(regex);
+          if(match && match[1]){
+               return match[1];
+          }
+          return null;
      }
      return (
           <ScrollView className=""
@@ -55,7 +73,7 @@ export default function RecipeDetailScreen(props) {
                                    <Text className="font-bold flex-1 text-neutral-700 " style={{ fontSize: hp(4) }}>
                                         {meal?.strMeal}
                                    </Text>
-                                   <Text className="font-medium flex-1 text-neutral-400 " style={{ fontSize: hp(2.9) }}>
+                                   <Text className="font-medium flex-1 text-neutral-500 " style={{ fontSize: hp(2.9) }}>
                                         {meal?.strArea}
                                    </Text>
                               </View>
@@ -103,7 +121,41 @@ export default function RecipeDetailScreen(props) {
                                         </View>
                                    </View>
                               </View>
-                              <View></View>
+                              <View className="space-y-4">
+                                   <Text className="text-xl font-bold flex-1 text-black/70">Ingredients</Text>
+                                   <View className="space-y-2 ml-3">
+                                        {
+                                             ingredientsIndex(meal).map(i => {
+                                                  return (
+                                                       <View key={i} className="flex-row space-x-4">
+                                                            <View style={{ height: hp(1.5), width: hp(1.5) }}
+                                                                 className="bg-[#f61313] rounded full" />
+                                                            <View className="flex-row space-x-2">
+                                                                 <Text style={{ fontSize: hp(2.4) }} className="font-extrabold text-neutral-700">{meal['strMeasure' + i]}</Text>
+                                                                 <Text style={{ fontSize: hp(2.4) }} className="font-medium text-neutral-600">{meal['strIngredient' + i]}</Text>
+                                                            </View>
+                                                       </View>
+                                                  )
+                                             })
+                                        }
+                                   </View>
+                              </View>
+                              <View className="space-y-4">
+                                   <Text className="text-xl font-bold flex-1 text-black/70">Instructions</Text>
+                                   <Text style={{ fontSize: hp(2.6) }}>{
+                                        meal?.strInstructions}</Text>
+                              </View>
+                              {
+                                   meal.strYoutube && (
+                                        <View className="space-y-4 ">
+                                             <Text className="text-xl font-bold flex-1 text-black/70">YT video</Text>
+                                             <View>
+                                                  <YoutubeIframe videoId={getYoutubeVideoId(meal.strYoutube)} height={hp(30)}>
+                                                  </YoutubeIframe>
+                                             </View>
+                                        </View>
+                                   )
+                              }
                          </View>
                     )
                }
